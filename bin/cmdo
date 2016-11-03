@@ -1,0 +1,78 @@
+#!/bin/sh
+
+# Font colors
+RED=$'\e[31m'
+GREEN=$'\e[32m'
+YELLOW=$'\e[33m'
+bLUE=$'\e[34m'
+MAGENTA=$'\e[35m'
+CYAN=$'\e[36m'
+LIGHTGRAY=$'\e[37m'
+DARKGRAY=$'\e[90m'
+LIGHTRED=$'\e[91m'
+LIGHTGREEN=$'\e[92m'
+LIGHTYELLOW=$'\e[93m'
+LIGHTBLUE=$'\e[94m'
+LIGHTMAGENTA=$'\e[95m'
+LIGHTCYAN=$'\e[96m'
+WHITE=$'\e[97m'
+NORMARIZE=$'\e[0m'
+
+
+usage() {
+  echo >&2 "Usage cmdo <command>"
+  echo >&2 ""
+  echo >&2 "There are common cmdo commands:"
+  echo >&2 ""
+  echo >&2 "install   Install a package from remote repository"
+  echo >&2 "update    Update a package"
+  echo >&2 "remove    Remove a package from disk"
+}
+
+install() {
+  case "$TARGET" in
+    github.com*|bitbucket.org/*|hub.jazz.net/git/*|git.apache.org/*|git.openstack.org/*)
+      vcs=git
+      repository_prefix="https://"
+      ;;
+  esac
+
+  target_dir="$PREFIX/pkg/$TARGET"
+  if [ -d "$target_dir" ]; then
+    echo "Using ${TARGET}"
+    exit 0
+  fi
+
+  echo "${GREEN}Installing ${TARGET}${NORMARIZE}"
+  git clone --quiet "${repository_prefix}${TARGET}" "${target_dir}"
+  if [ $? != 0 ]; then
+    echo "${RED}Installing ${TARGET} failed${NORMARIZE}"
+    exit 1
+  fi
+}
+
+while [[ $# -gt 1 ]]; do
+  case "$1" in
+    install|update|remove)
+      SUB_COMMAND="$1"
+      ;;
+    -h|--help)
+      usage
+      exit
+      ;;
+    -p|--prefix)
+      PREFIX="$1"
+      ;;
+    *)
+      echo >&2 "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+  shift # past argument or value
+done
+
+PREFIX=$HOME/.cmdo
+TARGET=$1
+
+$SUB_COMMAND
+
