@@ -40,14 +40,18 @@ install() {
       ;;
   esac
 
-  target_dir="$PREFIX/pkg/$TARGET"
+  target_dir="$CMDO_HOME/pkg/$TARGET"
   if [ -d "$target_dir" ]; then
-    echo "Using ${TARGET}"
+    echo "${LIGHTYELLOW}Using ${TARGET}${NORMARIZE}"
     exit 0
   fi
 
   echo "${GREEN}Installing ${TARGET}${NORMARIZE}"
-  git clone --quiet "${repository_prefix}${TARGET}" "${target_dir}"
+  case "$vcs" in
+    git)
+      git clone --quiet "${repository_prefix}${TARGET}" "${target_dir}"
+      ;;
+  esac
   if [ $? != 0 ]; then
     echo "${RED}Installing ${TARGET} failed${NORMARIZE}"
     exit 1
