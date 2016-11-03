@@ -18,6 +18,8 @@ LIGHTCYAN=$'\e[96m'
 WHITE=$'\e[97m'
 NORMARIZE=$'\e[0m'
 
+# Envs
+: ${CMDO_HOME:=$HOME/.cmdo}
 
 usage() {
   echo >&2 "Usage cmdo <command>"
@@ -60,9 +62,6 @@ while [[ $# -gt 1 ]]; do
       usage
       exit
       ;;
-    -p|--prefix)
-      PREFIX="$1"
-      ;;
     *)
       echo >&2 "Unknown option: $1"
       exit 1
@@ -71,7 +70,6 @@ while [[ $# -gt 1 ]]; do
   shift # past argument or value
 done
 
-PREFIX=$HOME/.cmdo
 TARGET=$1
 
 $SUB_COMMAND
