@@ -32,12 +32,21 @@ usage() {
   echo >&2 "remove    Remove a package from disk"
 }
 
+list() {
+  find ${CMDO_HOME} -name .git -type d | \
+    grep -oP "^${CMDO_HOME}/pkg/\K.*" | \
+    xargs dirname
+}
+
 install() {
   case "$TARGET" in
     github.com*|bitbucket.org/*|hub.jazz.net/git/*|git.apache.org/*|git.openstack.org/*)
       vcs=git
       repository_prefix="https://"
       ;;
+    *)
+      echo >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      exit 1
   esac
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
@@ -58,23 +67,25 @@ install() {
   fi
 }
 
-while [ $# -gt 1 ]; do
-  case "$1" in
-    install|update|remove)
-      SUB_COMMAND="$1"
-      ;;
-    -h|--help)
-      usage
-      exit
-      ;;
-    *)
-      echo >&2 "Unknown option: $1"
-      exit 1
-      ;;
-  esac
-  shift # past argument or value
-done
+if [ $# -eq 0 ]; then
+  usage
+  exit
+fi
 
+case "$1" in
+  list|install|update|remove)
+    SUB_COMMAND="$1"
+    ;;
+  -h|--help)
+    usage
+    exit
+    ;;
+  *)
+    echo >&2 "${RED}Unknown cmdo command: $1${NORMARIZE}"
+    exit 1
+    ;;
+esac
+shift
 TARGET=$1
 
 $SUB_COMMAND
