@@ -50,7 +50,7 @@ install() {
   esac
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
-  if [ -d "$target_dir" ]; then
+  if [ -d "${target_dir}/.git" ]; then
     echo "${LIGHTYELLOW}Using ${TARGET}${NORMARIZE}"
     exit 0
   fi
@@ -63,6 +63,38 @@ install() {
   esac
   if [ $? != 0 ]; then
     echo "${RED}Installing ${TARGET} failed${NORMARIZE}"
+    exit 1
+  fi
+}
+
+update() {
+  case "$TARGET" in
+    github.com*|bitbucket.org/*|hub.jazz.net/git/*|git.apache.org/*|git.openstack.org/*)
+      vcs=git
+      repository_prefix="https://"
+      ;;
+    *)
+      echo >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      exit 1
+  esac
+
+  target_dir="$CMDO_HOME/pkg/$TARGET"
+  if [ ! -d "${target_dir}/.git" ]; then
+    echo "${RED}Not installed: ${TARGET}${NORMARIZE}"
+    exit 1
+  fi
+
+  echo "${GREEN}Updating ${TARGET}${NORMARIZE}"
+  case "$vcs" in
+    git)
+      (
+        cd "$target_dir"
+        git pull --quiet origin master
+      )
+      ;;
+  esac
+  if [ $? != 0 ]; then
+    echo "${RED}Updating ${TARGET} failed${NORMARIZE}"
     exit 1
   fi
 }
