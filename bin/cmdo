@@ -1,22 +1,23 @@
 #!/bin/sh
 
 # Font colors
-RED=$'\e[31m'
-GREEN=$'\e[32m'
-YELLOW=$'\e[33m'
-bLUE=$'\e[34m'
-MAGENTA=$'\e[35m'
-CYAN=$'\e[36m'
-LIGHTGRAY=$'\e[37m'
-DARKGRAY=$'\e[90m'
-LIGHTRED=$'\e[91m'
-LIGHTGREEN=$'\e[92m'
-LIGHTYELLOW=$'\e[93m'
-LIGHTBLUE=$'\e[94m'
-LIGHTMAGENTA=$'\e[95m'
-LIGHTCYAN=$'\e[96m'
-WHITE=$'\e[97m'
-NORMARIZE=$'\e[0m'
+BLACK='\033[30m'
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+bLUE='\033[34m'
+MAGENTA='\033[35m'
+CYAN='\033[36m'
+LIGHTGRAY='\033[37m'
+DARKGRAY='\033[90m'
+LIGHTRED='\033[91m'
+LIGHTGREEN='\033[92m'
+LIGHTYELLOW='\033[93m'
+LIGHTBLUE='\033[94m'
+LIGHTMAGENTA='\033[95m'
+LIGHTCYAN='\033[96m'
+WHITE='\033[97m'
+NORMARIZE='\033[0m'
 
 # Envs
 : ${CMDO_HOME:=$HOME/.cmdo}
@@ -53,7 +54,7 @@ install() {
   fi
 }
 
-while [[ $# -gt 1 ]]; do
+while [ $# -gt 1 ]; do
   case "$1" in
     install|update|remove)
       SUB_COMMAND="$1"
