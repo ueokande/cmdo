@@ -99,6 +99,27 @@ update() {
   fi
 }
 
+remove() {
+  case "$TARGET" in
+    github.com*|bitbucket.org/*|hub.jazz.net/git/*|git.apache.org/*|git.openstack.org/*)
+      vcs=git
+      repository_prefix="https://"
+      ;;
+    *)
+      echo >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      exit 1
+  esac
+
+  target_dir="$CMDO_HOME/pkg/$TARGET"
+  if [ ! -d "${target_dir}/.git" ]; then
+    echo "${RED}Not installed: ${TARGET}${NORMARIZE}"
+    exit 1
+  fi
+
+  echo "${GREEN}Removing ${TARGET}${NORMARIZE}"
+  rm -rf "$target_dir"
+}
+
 if [ $# -eq 0 ]; then
   usage
   exit
