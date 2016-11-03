@@ -35,7 +35,7 @@ usage() {
 list() {
   find ${CMDO_HOME} -name .git -type d | \
     grep -oP "^${CMDO_HOME}/pkg/\K.*" | \
-    xargs dirname
+    xargs --max-args=1 --no-run-if-empty dirname
 }
 
 install() {
