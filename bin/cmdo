@@ -45,24 +45,24 @@ install() {
       repository_prefix="https://"
       ;;
     *)
-      echo >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      command echo -e >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
       exit 1
   esac
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
   if [ -d "${target_dir}/.git" ]; then
-    echo "${LIGHTYELLOW}Using ${TARGET}${NORMARIZE}"
+    command echo -e "${LIGHTYELLOW}Using ${TARGET}${NORMARIZE}"
     exit 0
   fi
 
-  echo "${GREEN}Installing ${TARGET}${NORMARIZE}"
+  command echo -e "${GREEN}Installing ${TARGET}${NORMARIZE}"
   case "$vcs" in
     git)
       git clone --quiet "${repository_prefix}${TARGET}" "${target_dir}"
       ;;
   esac
   if [ $? != 0 ]; then
-    echo "${RED}Installing ${TARGET} failed${NORMARIZE}"
+    command echo -e "${RED}Installing ${TARGET} failed${NORMARIZE}"
     exit 1
   fi
 }
@@ -74,17 +74,17 @@ update() {
       repository_prefix="https://"
       ;;
     *)
-      echo >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      command echo -e >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
       exit 1
   esac
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
   if [ ! -d "${target_dir}/.git" ]; then
-    echo "${RED}Not installed: ${TARGET}${NORMARIZE}"
+    command echo -e "${RED}Not installed: ${TARGET}${NORMARIZE}"
     exit 1
   fi
 
-  echo "${GREEN}Updating ${TARGET}${NORMARIZE}"
+  command echo -e "${GREEN}Updating ${TARGET}${NORMARIZE}"
   case "$vcs" in
     git)
       (
@@ -94,7 +94,7 @@ update() {
       ;;
   esac
   if [ $? != 0 ]; then
-    echo "${RED}Updating ${TARGET} failed${NORMARIZE}"
+    command echo -e "${RED}Updating ${TARGET} failed${NORMARIZE}"
     exit 1
   fi
 }
@@ -106,17 +106,17 @@ remove() {
       repository_prefix="https://"
       ;;
     *)
-      echo >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      command echo -e >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
       exit 1
   esac
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
   if [ ! -d "${target_dir}/.git" ]; then
-    echo "${RED}Not installed: ${TARGET}${NORMARIZE}"
+    command echo -e "${RED}Not installed: ${TARGET}${NORMARIZE}"
     exit 1
   fi
 
-  echo "${GREEN}Removing ${TARGET}${NORMARIZE}"
+  command echo -e "${GREEN}Removing ${TARGET}${NORMARIZE}"
   rm -rf "$target_dir"
 }
 
@@ -134,7 +134,7 @@ case "$1" in
     exit
     ;;
   *)
-    echo >&2 "${RED}Unknown cmdo command: $1${NORMARIZE}"
+    command echo -e >&2 "${RED}Unknown cmdo command: $1${NORMARIZE}"
     exit 1
     ;;
 esac
