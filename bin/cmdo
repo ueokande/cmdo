@@ -72,7 +72,6 @@ install() {
   fetch "$TARGET" >/dev/null
 
   pkgdir="$CMDO_HOME/pkg/$TARGET"
-  test -d "$CMDO_HOME/bin" || mkdir -p "$CMDO_HOME/bin"
 
   dirs="bin usr etc"
   for d in $dirs; do
@@ -80,7 +79,7 @@ install() {
     test -d "$source" && cp -rni "$source" "$CMDO_HOME"
   done
   for f in "$pkgdir"/*; do
-    test -x "$f" && cp -ni "$f" "$CMDO_HOME/bin"
+    test -x "$f" && test ! -d "$f" && cp -ni "$f" "$CMDO_HOME/bin"
   done
 }
 
