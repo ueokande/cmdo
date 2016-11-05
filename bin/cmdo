@@ -27,7 +27,8 @@ usage() {
   echo >&2 ""
   echo >&2 "There are common cmdo commands:"
   echo >&2 ""
-  echo >&2 "install   Install a package from remote repository"
+  echo >&2 "install   Fetch and install a package from remote repository"
+  echo >&2 "fetch     Fetch a source from remote repository"
   echo >&2 "update    Update a package"
   echo >&2 "remove    Remove a package from disk"
 }
@@ -38,7 +39,7 @@ list() {
     xargs --max-args=1 --no-run-if-empty dirname
 }
 
-install() {
+fetch() {
   case "$TARGET" in
     github.com*|bitbucket.org/*|hub.jazz.net/git/*|git.apache.org/*|git.openstack.org/*)
       vcs=git
@@ -51,20 +52,30 @@ install() {
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
   if [ -d "${target_dir}/.git" ]; then
-    command echo -e "${LIGHTYELLOW}Using ${TARGET}${NORMARIZE}"
-    exit 0
+    return
   fi
 
-  command echo -e "${GREEN}Installing ${TARGET}${NORMARIZE}"
+  command echo -e "${GREEN}Fetching ${TARGET}${NORMARIZE}"
   case "$vcs" in
     git)
       git clone --quiet "${repository_prefix}${TARGET}" "${target_dir}"
       ;;
   esac
   if [ $? != 0 ]; then
-    command echo -e "${RED}Installing ${TARGET} failed${NORMARIZE}"
+    command echo -e "${RED}Fetching ${TARGET} failed${NORMARIZE}"
     exit 1
   fi
+}
+
+install() {
+  command echo -e "${GREEN}Installing ${TARGET}${NORMARIZE}"
+  fetch "$TARGET" >/dev/null
+
+  dirs="bin usr etc"
+  for d in $dirs; do
+    source="$CMDO_HOME/pkg/$TARGET/$d"
+    test -d "$source" && cp -rni "$source" "$CMDO_HOME"
+  done
 }
 
 update() {
@@ -126,7 +137,7 @@ if [ $# -eq 0 ]; then
 fi
 
 case "$1" in
-  list|install|update|remove)
+  list|fetch|install|update|remove)
     SUB_COMMAND="$1"
     ;;
   -h|--help)
