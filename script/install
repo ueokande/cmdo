@@ -24,13 +24,8 @@ NORMARIZE='\033[0m'
 
 mkdir -p $CMDO_HOME/{bin,usr,etc,pkg}
 
-tmpfile="$(mktemp)"
-trap "rm -f $tmpfile" EXIT
-
-curl --silent -o "$tmpfile" "https://raw.githubusercontent.com/ueokande/cmdo/master/bin/cmdo"
-chmod +x $tmpfile
-
-$tmpfile install github.com/ueokande/cmdo
+curl -sSL "https://raw.githubusercontent.com/ueokande/cmdo/master/bin/cmdo" |
+  sh -s install github.com/ueokande/cmdo
 
 yesno() {
   message="$1"
