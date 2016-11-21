@@ -46,7 +46,7 @@ fetch() {
       repository_prefix="https://"
       ;;
     *)
-      command echo -e >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      printf >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}\n"
       exit 1
   esac
 
@@ -55,20 +55,20 @@ fetch() {
     return
   fi
 
-  command echo -e "${GREEN}Fetching ${TARGET}${NORMARIZE}"
+  printf "${GREEN}Fetching ${TARGET}${NORMARIZE}\n"
   case "$vcs" in
     git)
       git clone --quiet "${repository_prefix}${TARGET}" "${target_dir}"
       ;;
   esac
   if [ $? != 0 ]; then
-    command echo -e "${RED}Fetching ${TARGET} failed${NORMARIZE}"
+    printf "${RED}Fetching ${TARGET} failed${NORMARIZE}\n"
     exit 1
   fi
 }
 
 install() {
-  command echo -e "${GREEN}Installing ${TARGET}${NORMARIZE}"
+  printf "${GREEN}Installing ${TARGET}${NORMARIZE}\n"
   fetch "$TARGET" >/dev/null
 
   pkgdir="$CMDO_HOME/pkg/$TARGET"
@@ -90,17 +90,17 @@ update() {
       repository_prefix="https://"
       ;;
     *)
-      command echo -e >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      printf >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}\n"
       exit 1
   esac
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
   if [ ! -d "${target_dir}/.git" ]; then
-    command echo -e "${RED}Not installed: ${TARGET}${NORMARIZE}"
+    printf "${RED}Not installed: ${TARGET}${NORMARIZE}\n"
     exit 1
   fi
 
-  command echo -e "${GREEN}Updating ${TARGET}${NORMARIZE}"
+  printf "${GREEN}Updating ${TARGET}${NORMARIZE}\n"
   case "$vcs" in
     git)
       (
@@ -110,7 +110,7 @@ update() {
       ;;
   esac
   if [ $? != 0 ]; then
-    command echo -e "${RED}Updating ${TARGET} failed${NORMARIZE}"
+    printf "${RED}Updating ${TARGET} failed${NORMARIZE}\n"
     exit 1
   fi
 }
@@ -122,17 +122,17 @@ remove() {
       repository_prefix="https://"
       ;;
     *)
-      command echo -e >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}"
+      printf >&2 "${RED}Repository not supported: ${TARGET}${NORMARIZE}\n"
       exit 1
   esac
 
   target_dir="$CMDO_HOME/pkg/$TARGET"
   if [ ! -d "${target_dir}/.git" ]; then
-    command echo -e "${RED}Not installed: ${TARGET}${NORMARIZE}"
+    printf "${RED}Not installed: ${TARGET}${NORMARIZE}\n"
     exit 1
   fi
 
-  command echo -e "${GREEN}Removing ${TARGET}${NORMARIZE}"
+  printf "${GREEN}Removing ${TARGET}${NORMARIZE}\n"
   rm -rf "$target_dir"
 }
 
@@ -150,7 +150,7 @@ case "$1" in
     exit
     ;;
   *)
-    command echo -e >&2 "${RED}Unknown cmdo command: $1${NORMARIZE}"
+    printf >&2 "${RED}Unknown cmdo command: $1${NORMARIZE}\n"
     exit 1
     ;;
 esac
