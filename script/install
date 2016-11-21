@@ -33,7 +33,7 @@ yesno() {
   message="$1"
   while true; do
     printf "${message} (y/n): "
-    read yn
+    read yn </dev/tty >/dev/tty
     case $yn in
       [Yy]* ) return 0;;
       [Nn]* ) return 1;;
