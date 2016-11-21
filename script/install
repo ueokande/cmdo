@@ -22,7 +22,9 @@ NORMARIZE='\033[0m'
 # Envs
 : ${CMDO_HOME:=$HOME/.cmdo}
 
-mkdir -p $CMDO_HOME/{bin,usr,etc,pkg}
+for d in bin usr etc pkg; do
+  mkdir -p "$CMDO_HOME/$d"
+done
 
 curl -sSL "https://raw.githubusercontent.com/ueokande/cmdo/master/bin/cmdo" |
   sh -s install github.com/ueokande/cmdo
@@ -30,7 +32,8 @@ curl -sSL "https://raw.githubusercontent.com/ueokande/cmdo/master/bin/cmdo" |
 yesno() {
   message="$1"
   while true; do
-    read -p "${message} (y/n): " yn
+    printf "${message} (y/n): "
+    read yn
     case $yn in
       [Yy]* ) return 0;;
       [Nn]* ) return 1;;
