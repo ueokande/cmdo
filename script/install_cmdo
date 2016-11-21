@@ -1,0 +1,66 @@
+#!/bin/sh
+
+# Font colors
+BLACK='\033[30m'
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+bLUE='\033[34m'
+MAGENTA='\033[35m'
+CYAN='\033[36m'
+LIGHTGRAY='\033[37m'
+DARKGRAY='\033[90m'
+LIGHTRED='\033[91m'
+LIGHTGREEN='\033[92m'
+LIGHTYELLOW='\033[93m'
+LIGHTBLUE='\033[94m'
+LIGHTMAGENTA='\033[95m'
+LIGHTCYAN='\033[96m'
+WHITE='\033[97m'
+NORMARIZE='\033[0m'
+
+# Envs
+: ${CMDO_HOME:=$HOME/.cmdo}
+
+mkdir -p $CMDO_HOME/{bin,usr,etc,pkg}
+
+tmpfile="$(mktemp)"
+trap "rm -f $tmpfile" EXIT
+
+curl --silent -o "$tmpfile" "https://raw.githubusercontent.com/ueokande/cmdo/master/bin/cmdo"
+chmod +x $tmpfile
+
+$tmpfile install github.com/ueokande/cmdo
+
+yesno() {
+  message="$1"
+  while true; do
+    read -p "${message} (y/n): " yn
+    case $yn in
+      [Yy]* ) return 0;;
+      [Nn]* ) return 1;;
+    esac
+  done
+}
+
+command echo -e ${CYAN}"Installed cmdo successfully"${NORMARIZE}
+command echo -e ${CYAN}"You need to append the following into your profile files(.profile, .bashrc, or .zshrc)"${NORMARIZE}
+command echo 
+command echo '    if [ -d "$HOME/.cmdo/bin" ]; then'
+command echo '      export CMDO_HOME="$HOME/.cmdo"'
+command echo '      export PATH="$HOME/.cmdo/bin:$PATH"'
+command echo '    fi'
+command echo
+
+for f in .bashrc .zshrc .profile; do
+  if [ -f "$HOME/$f" ]; then
+    yesno "Do you want to append into your $f?"
+    if [ $? -eq 0 ]; then
+      command echo >>"$HOME/$f"
+      command echo >>"$HOME/$f" 'if [ -d "$HOME/.cmdo/bin" ]; then'
+      command echo >>"$HOME/$f" '  export CMDO_HOME="$HOME/.cmdo"'
+      command echo >>"$HOME/$f" '  export PATH="$HOME/.cmdo/bin:$PATH"'
+      command echo >>"$HOME/$f" 'fi'
+    fi
+  fi
+done
