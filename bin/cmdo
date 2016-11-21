@@ -79,7 +79,8 @@ install() {
     test -d "$source" && cp -rni "$source" "$CMDO_HOME"
   done
   for f in "$pkgdir"/*; do
-    test -x "$f" && test ! -d "$f" && cp -ni "$f" "$CMDO_HOME/bin"
+    mkdir -p "$CMDO_HOME/bin"
+    test -x "$f" && test ! -d "$f" && cp -ni "$f" -t "$CMDO_HOME/bin"
   done
 }
 
