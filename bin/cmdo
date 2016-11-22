@@ -76,10 +76,10 @@ install() {
   dirs="bin usr etc"
   for d in $dirs; do
     source="$pkgdir/$d"
-    test -d "$source" && cp -rni "$source" "$CMDO_HOME"
+    test -d "$source" && cp -fr "$source" "$CMDO_HOME"
   done
   for f in "$pkgdir"/*; do
-    test -x "$f" && test ! -d "$f" && cp -ni "$f" -t "$CMDO_HOME/bin"
+    test -x "$f" && test ! -d "$f" && cp -f "$f" -t "$CMDO_HOME/bin"
   done
 }
 
