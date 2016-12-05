@@ -42,7 +42,7 @@ yesno() {
 }
 
 printf "${CYAN}Installed cmdo successfully${NORMARIZE}\n"
-printf "${CYAN}You need to append the following into your profile files(.profile, .bashrc, or .zshrc)${NORMARIZE}\n"
+printf "${CYAN}You need to append the following into your profile files(.bash_profile, .zprofile, or .profile)${NORMARIZE}\n"
 echo
 echo '    if [ -d "$HOME/.cmdo/bin" ]; then'
 echo '      export CMDO_HOME="$HOME/.cmdo"'
@@ -50,7 +50,7 @@ echo '      export PATH="$HOME/.cmdo/bin:$PATH"'
 echo '    fi'
 echo
 
-for f in .bashrc .zshrc; do
+for f in .bash_profile .zprofile .profile; do
   if [ ! -f "$HOME/$f" ] || grep CMDO_HOME "$HOME/$f"; then
     continue;
   fi
