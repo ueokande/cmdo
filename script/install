@@ -42,7 +42,7 @@ yesno() {
 }
 
 printf "${CYAN}Installed cmdo successfully${NORMARIZE}\n"
-printf "${CYAN}You need to append the following into your profile files(.profile, .bashrc, or .zshrc)${NORMARIZE}\n"
+printf "${CYAN}You need to append the following into your profile files(.bash_profile, .zprofile, or .profile)${NORMARIZE}\n"
 echo
 echo '    if [ -d "$HOME/.cmdo/bin" ]; then'
 echo '      export CMDO_HOME="$HOME/.cmdo"'
@@ -50,15 +50,18 @@ echo '      export PATH="$HOME/.cmdo/bin:$PATH"'
 echo '    fi'
 echo
 
-for f in .bashrc .zshrc .profile; do
-  if [ -f "$HOME/$f" ]; then
-    yesno "Do you want to append into your $f?"
-    if [ $? -eq 0 ]; then
-      echo >>"$HOME/$f"
-      echo >>"$HOME/$f" 'if [ -d "$HOME/.cmdo/bin" ]; then'
-      echo >>"$HOME/$f" '  export CMDO_HOME="$HOME/.cmdo"'
-      echo >>"$HOME/$f" '  export PATH="$HOME/.cmdo/bin:$PATH"'
-      echo >>"$HOME/$f" 'fi'
-    fi
+for f in .bash_profile .zprofile .profile; do
+  if [ ! -f "$HOME/$f" ] || grep CMDO_HOME "$HOME/$f"; then
+    continue;
+  fi
+
+  yesno "Do you want to append into your $f?"
+  if [ $? -eq 0 ]; then
+    echo >>"$HOME/$f"
+    echo >>"$HOME/$f" '# Setup cmdo'
+    echo >>"$HOME/$f" 'if [ -d "$HOME/.cmdo/bin" ]; then'
+    echo >>"$HOME/$f" '  export CMDO_HOME="$HOME/.cmdo"'
+    echo >>"$HOME/$f" '  export PATH="$HOME/.cmdo/bin:$PATH"'
+    echo >>"$HOME/$f" 'fi'
   fi
 done
