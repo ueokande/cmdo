@@ -11,7 +11,7 @@ Installation
 ------------
 
 ```sh
-\curl -sSL https://raw.githubusercontent.com/ueokande/cmdo/master/script/install | sh -s
+curl -sSL https://ueokande.github.io/cmdo/install | sh -s
 ```
 
 Usage
@@ -23,7 +23,7 @@ You can install a repository via github.com as following:
 cmdo install github.com/ueokande/tegrep
 ```
 
-All commands
+All commands of cmdo is the following:
 
 - `install` - installs a package from remote repository
 - `list` - displays installed packages
@@ -31,15 +31,15 @@ All commands
 - `remove` - removes a package from local disk
 - `fetch` - downloads a package into local disk, but not installs a package
 
-Package requirements
---------------------
+Requirements for a package
+--------------------------
 
-Cmdo installers fetches by using git-clone into local disk, and copy files in
-the repository to `$HOME/.cmdo`.  The copied files are files in `bin` on the
-root of repository, and executable files on the root.
+Cmdo installs a package fetches by using git-clone into local disk, and copy
+files in the repository to `$HOME/.cmdo`.  The copied files are files in `bin`
+on the root of repository, and executable files on the root.
 
-Therefore, in order to make a package worked with cmdo, put executable files on
-the root of the repository or `bin` directory of your repository.
+To make a package worked with cmdo, put executable files on the root of the
+repository, or `bin` directory in the root directory.
 
 Licence
 -------
