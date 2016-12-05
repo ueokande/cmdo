@@ -50,11 +50,16 @@ echo '      export PATH="$HOME/.cmdo/bin:$PATH"'
 echo '    fi'
 echo
 
-for f in .bashrc .zshrc .profile; do
+for f in .bashrc .zshrc; do
+  if grep CMDO_HOME "$HOME/$f"; then
+    continue;
+  fi
+
   if [ -f "$HOME/$f" ]; then
     yesno "Do you want to append into your $f?"
     if [ $? -eq 0 ]; then
       echo >>"$HOME/$f"
+      echo >>"$HOME/$f" '# Setup cmdo'
       echo >>"$HOME/$f" 'if [ -d "$HOME/.cmdo/bin" ]; then'
       echo >>"$HOME/$f" '  export CMDO_HOME="$HOME/.cmdo"'
       echo >>"$HOME/$f" '  export PATH="$HOME/.cmdo/bin:$PATH"'
